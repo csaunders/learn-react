@@ -1,64 +1,67 @@
 import React from 'react-native';
 import Stylish from 'react-native-stylish';
-import Components from './App/Components';
-import LocationStore from './App/Stores/LocationStore';
-import LocationConstants from './App/Constants/LocationConstants'
-import SearchResultStore from './App/Stores/SearchResultStore';
+import Scenes from './App/Scenes';
 import Dispatcher from './App/Dispatcher';
+import SearchResultConstants from './App/Constants/SearchResultConstants';
 
 var {
   AppRegistry,
   Component,
   View,
-  Text
+  Text,
+  Navigator
 } = React;
-
-var {
-  Field,
-  ProductSearch
-} = Components;
-
-function getLocationState(){
-    return {
-      location: LocationStore.location,
-      postalCode: LocationStore.postalCode
-    };
-}
 
 class StylingExample extends Component {
   constructor(props) {
     super(props);
-    this.state = getLocationState();
-  }
-
-  _onChange() {
-    this.setState(getLocationState());
   }
 
   componentDidMount() {
-    LocationStore.addChangeListener(::this._onChange);
-    navigator.geolocation.getCurrentPosition( (posn) => {
-      Dispatcher.dispatch({
-        actionType: LocationConstants.LOCATION_UPDATE,
-        latitude: posn.coords.latitude,
-        longitude: posn.coords.longitude
-      });
+    Dispatcher.register((payload) => {
+      switch(payload.actionType) {
+        case SearchResultConstants.ITEM_SELECTED:
+          this.props.navigator.push({id: 'details', item: payload.item});
+          break;
+      }
     });
   }
 
-  componentWillUnmount() {
-    LocationStore.removeListeners()
+  renderScene(route, nav) {
+    switch(route.id) {
+      case 'details':
+        return (<Scenes.Details navigator={nav} item={route.item} />);
+        break;
+      default:
+        return (<Scenes.Home navigator={nav} />);
+    }
   }
 
   render() {
     return (
-      <View style={this.stylesFor('container')}>
-        <Text>Lat: {this.state.location.latitude}</Text>
-        <Text>Lon: {this.state.location.longitude}</Text>
-        <Text>Postal Code: {this.state.postalCode}</Text>
-        <ProductSearch style={{flex: 1}}/>
-      </View>
+      <Navigator
+        style={this.stylesFor('container')}
+        ref={this._setNavigatorRef}
+        initialRoute={{ message: 'First Scene'}}
+        renderScene={this.renderScene}
+        configureScene={(route) => {
+          if(route.sceneConfig) {
+            return route.sceneConfig;
+          }
+          return Navigator.SceneConfigs.FromTheRight;
+        }}
+      />
     );
+  }
+
+  componentWillUnmount() {
+    this._listeners && this._listeners.forEach(listener => listener.remove());
+  }
+
+  _setNavigatorRef(navigator) {
+    if (navigator !== this._navigator) {
+      this.__navigator = navigator;
+    }
   }
 }
 

@@ -46,6 +46,14 @@ class ProductActions {
     })
     .done();
   }
+
+  select(product) {
+    if(!product) { return; }
+    Dispatcher.dispatch({
+      actionType: SearchResultConstants.ITEM_SELECTED,
+      item: product
+    });
+  }
 }
 
 module.exports = new ProductActions

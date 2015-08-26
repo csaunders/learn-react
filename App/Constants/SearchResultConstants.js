@@ -3,4 +3,5 @@ module.exports = {
   SEARCH_COMPLETE: 'search-complete',
   NO_RESULTS: 'no-results',
   NEW_SEARCH_ACTION: 'new-search',
+  ITEM_SELECTED: 'item-selected'
 }

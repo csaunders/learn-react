@@ -1,5 +1,6 @@
 import React from 'react-native';
 import Stylish from 'react-native-stylish';
+import ProductActions from '../../Actions/ProductActions';
 
 var {
   Component,
@@ -12,7 +13,12 @@ class SearchResultItem extends Component {
   render() {
     product = this.props.result;
     return (
-      <View style={this.stylesFor('container')}>
+      <View
+        onClick={() => {
+          console.log("Yar");
+          // ProductActions.select(this.product);
+        }}
+        style={this.stylesFor('container')}>
         <Image
           style={this.stylesFor('thumbnail')}
           source={{uri: product.thumbnail }} />
