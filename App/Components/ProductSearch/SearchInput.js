@@ -1,8 +1,6 @@
 import React from 'react-native';
 import Stylish from 'react-native-stylish';
-import Dispatcher from '../../Dispatcher';
-import LCBO from '../../Utilities/LCBO';
-import SearchResultConstants from '../../Constants/SearchResultConstants';
+import ProductActions from '../../Actions/ProductActions';
 
 var {
   Component,
@@ -38,50 +36,8 @@ class SearchInput extends Component {
     this.setState({query: query, timeoutId: timeoutId});
   }
 
-  _notifyNewSearch() {
-    Dispatcher.dispatch({
-      actionType: SearchResultConstants.NEW_SEARCH_ACTION,
-      message: 'Enter your query above'
-    });
-  }
-
-  _notifySearchStarted(query) {
-    Dispatcher.dispatch({
-      actionType: SearchResultConstants.SEARCH_STARTED,
-      message: `Searching for products that match "${query}"`,
-      status: "searching"
-    })
-  }
-
-  _notifyError() {
-    Dispatcher.dispatch({
-      actionType: SearchResultConstants.NO_RESULTS,
-      message: "An Error Occurred",
-      status: "error"
-    })
-  }
-
-  _notifySuccess(products) {
-    Dispatcher.dispatch({
-      actionType: SearchResultConstants.SEARCH_COMPLETE,
-      results: products
-    })
-  }
-
   _search() {
-    this._notifyNewSearch();
-    if(this.state.query.length === 0) { return; }
-
-    this._notifySearchStarted(this.state.query);
-    LCBO.products(this.state.query)
-    .then((products) => {
-      this._notifySuccess(products);
-    })
-    .catch((error) => {
-      console.warn(error);
-      this._notifyError();
-    })
-    .done();
+    ProductActions.search(this.state.query);
   }
 }
 
