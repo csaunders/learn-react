@@ -1,3 +1,4 @@
 module.exports = {
-  Field: require('./Field')
+  Field: require('./Field'),
+  ProductSearch: require('./ProductSearch')
 }
