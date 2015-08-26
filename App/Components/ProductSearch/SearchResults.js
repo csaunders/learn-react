@@ -74,7 +74,6 @@ class SearchResults extends Component {
       <View style={{flex: 1}}>
         <Text>Displaying {this.state.results.getRowCount()} product(s)</Text>
         <ListView
-          style={{flex: 1}}
           dataSource={this.state.results}
           renderRow={this._renderResult} />
       </View>

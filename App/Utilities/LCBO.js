@@ -1,10 +1,13 @@
 class Product {
   constructor(attrs){
+    this.image = attrs.image_url;
     this.thumbnail = attrs.image_thumb_url;
     this.title = attrs.name;
     this.producer = attrs.producer_name;
     this.origin = attrs.origin;
     this.package = attrs.package;
+    console.log(attrs)
+    this.description = attrs.description;
     this.price = `\$${attrs.price_in_cents/100.0}`;
   }
 }

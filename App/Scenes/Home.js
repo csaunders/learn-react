@@ -4,7 +4,9 @@ import Components from '../Components';
 import LocationStore from '../Stores/LocationStore';
 import LocationConstants from '../Constants/LocationConstants'
 import SearchResultStore from '../Stores/SearchResultStore';
+import SearchResultConstants from '../Constants/SearchResultConstants';
 import Dispatcher from '../Dispatcher';
+import Detail from './Detail'
 
 var {
   AppRegistry,
@@ -37,8 +39,24 @@ class Home extends Component {
   }
 
   componentDidMount() {
+    Dispatcher.register((payload) => {
+      switch(payload.actionType) {
+        case SearchResultConstants.ITEM_SELECTED:
+          this.props.navigator.push({
+            title: payload.item.title,
+            component: Detail,
+            passProps: {
+              item: payload.item,
+              lat: this.state.location.latitude,
+              lon: this.state.location.longitude
+            }});
+          break;
+      }
+    });
+
     LocationStore.addChangeListener(::this._onChange);
     navigator.geolocation.getCurrentPosition( (posn) => {
+      // this.props.navigator.push({title: 'Details', component: Detail});
       Dispatcher.dispatch({
         actionType: LocationConstants.LOCATION_UPDATE,
         latitude: posn.coords.latitude,
@@ -57,7 +75,7 @@ class Home extends Component {
         <Text>Lat: {this.state.location.latitude}</Text>
         <Text>Lon: {this.state.location.longitude}</Text>
         <Text>Postal Code: {this.state.postalCode}</Text>
-        <ProductSearch style={{flex: 1}}/>
+        <ProductSearch />
       </View>
     );
   }
@@ -65,8 +83,10 @@ class Home extends Component {
 
 Stylish.for(Home).base({
   container: {
-    flex: 1,
-    paddingTop: 20
+    marginTop: 70,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flex: 1
   }
 })
 

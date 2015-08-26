@@ -18,6 +18,10 @@ class SearchInput extends Component {
     }
   }
 
+  componentWillMount(){
+    this._search();
+  }
+
   render() {
     return (
       <View style={this.stylesFor('container')}>
@@ -42,7 +46,7 @@ class SearchInput extends Component {
 }
 
 SearchInput.defaultProps = {
-  defaultQuery: '',
+  defaultQuery: 'beaus',
 }
 
 Stylish.for(SearchInput).base({

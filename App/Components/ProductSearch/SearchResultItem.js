@@ -6,29 +6,30 @@ var {
   Component,
   View,
   Text,
-  Image
+  Image,
+  TouchableHighlight
 } = React;
 
 class SearchResultItem extends Component {
   render() {
-    product = this.props.result;
+    var product = this.props.result;
     return (
-      <View
-        onClick={() => {
-          console.log("Yar");
-          // ProductActions.select(this.product);
-        }}
-        style={this.stylesFor('container')}>
-        <Image
-          style={this.stylesFor('thumbnail')}
-          source={{uri: product.thumbnail }} />
-        <View style={this.stylesFor('containerRight')}>
-          <Text style={this.stylesFor('title')}>{product.title}</Text>
-          <Text style={this.stylesFor('producer')}>{product.producer}</Text>
-          <Text>{product.origin}</Text>
-          <Text style={this.stylesFor('details')}>{product.price} per {product.package}</Text>
+      <TouchableHighlight onPress={() => {
+        ProductActions.select(product)
+      }}>
+        <View
+          style={this.stylesFor('container')}>
+          <Image
+            style={this.stylesFor('thumbnail')}
+            source={{uri: product.thumbnail }} />
+          <View style={this.stylesFor('containerRight')}>
+            <Text style={this.stylesFor('title')}>{product.title}</Text>
+            <Text style={this.stylesFor('producer')}>{product.producer}</Text>
+            <Text>{product.origin}</Text>
+            <Text style={this.stylesFor('details')}>{product.price} per {product.package}</Text>
+          </View>
         </View>
-      </View>
+      </TouchableHighlight>
     );
   }
 }

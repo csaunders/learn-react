@@ -34,7 +34,7 @@ class ProductActions {
   }
 
   search(query) {
-    if(query.length == 0) { _notifyNewSearch(); }
+    if(query.length == 0) { this._notifyNewSearch(); return; }
     this._notifySearchStarted(query);
     LCBO.products(query)
     .then((products) => {
